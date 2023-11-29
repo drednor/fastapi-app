@@ -14,6 +14,27 @@ provider "aws" {
 }
 
 
+// To Generate Private Key
+resource "tls_private_key" "rsa_4096" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "key_pair" {
+  key_name   = "doodle_key"
+  public_key = tls_private_key.rsa_4096.public_key_openssh
+}
+
+// Save PEM file locally
+resource "local_file" "private_key" {
+  content  = tls_private_key.rsa_4096.private_key_pem
+  filename = "./doodle_key.pem"
+
+  provisioner "local-exec" {
+    command = "chmod 400 ./doodle_key.pem"
+  }
+}
+
 # Create a security group
 resource "aws_security_group" "sg_ec2" {
   name        = "sg_ec2"
@@ -41,10 +62,10 @@ resource "aws_security_group" "sg_ec2" {
   }
 }
 
-
 resource "aws_instance" "app_server" {
   ami           = "ami-0fc5d935ebf8bc3bc"
   instance_type = "t2.micro"
+  key_name      = aws_key_pair.key_pair.key_name
 
   user_data = <<-EOF
     #!/bin/bash

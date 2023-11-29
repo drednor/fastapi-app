@@ -1,0 +1,7 @@
+---
+- name: Ping EC2 instance
+  hosts: app_servers
+  become: true
+  tasks:
+    - name: Ping the server
+      ping:
