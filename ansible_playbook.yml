@@ -1,7 +1,31 @@
 ---
-- name: Ping EC2 instance
+- name: Deploy FastAPI App with Docker
   hosts: app_servers
   become: true
+  gather_facts: true
+
   tasks:
-    - name: Ping the server
-      ping:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+
+    - name: Install Git
+      package:
+        name: git
+        state: present
+
+    - name: Clone FastAPI App from GitHub
+      git:
+        repo: https://github.com/drednor/fastapi-app.git
+        dest: /path/to/local/clone
+        update: yes
+        
+    - name: Build Docker image
+      shell: docker build -t fastapi-app:fastapi /path/to/local/clone
+      args:
+        chdir: /path/to/local/clone
+
+    - name: Run Docker container
+      shell: docker run -d -p 8000:8000 fastapi-app:fastapi
+
