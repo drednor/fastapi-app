@@ -1,6 +1,15 @@
 name: testing and deployment
 
 on:
+  workflow_dispatch:
+    inputs:
+      terraform_action:
+        type: choice
+        description: select terraform action
+        options:
+        - apply
+        - destroy
+        required: true
   push:
     branches:
       - main
@@ -56,20 +65,9 @@ jobs:
         run: terraform init
 
       - name: Terraform apply
+        if: ${{ github.event.inputs.terraform_action == 'apply'}}
         run: terraform apply -auto-approve
-
-      - name: Get EC2 Public IP
-        id: ec2_ip
-        run: echo "ec2_ip=$(terraform output -raw ec2_instance_ip)" >> $GITHUB_OUTPUT
-
-      - name: wait for ec2
-        run: sleep 300
-
-      - name: Update Ansible Inventory
-        run: echo "[app_servers]\n${{ steps.ec2_ip.outputs.ec2_ip }} ansible_ssh_private_key_file=./doodle_key.pem ansible_ssh_user=ubuntu" > inventory.ini
-
-      - name: wait for one test run
-        run: sleep 120
       
       - name: terraform destroy
+        if: ${{ github.event.inputs.terraform_action == 'apply'}}
         run: terraform destroy -auto-approve
