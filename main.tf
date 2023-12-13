@@ -90,6 +90,17 @@ EOF
   }
 }
 
+
+data "aws_region" "current" {}
+
 output "public_ip" {
   value = aws_instance.app_server.public_ip
+}
+
+output "instance_id" {
+  value = aws_instance.app_server.id
+}
+
+output "region" {
+  value = data.aws_region.current.name
 }
