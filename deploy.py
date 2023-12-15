@@ -3,6 +3,7 @@ import subprocess
 import json
 import boto3
 import time
+import os
 
 
 def run_terraform():
