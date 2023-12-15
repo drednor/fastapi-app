@@ -25,6 +25,7 @@ def run_terraform():
     json_data = terraform_output.stdout[json_start:json_end]
 
     print("Extracted JSON data:", json_data)
+    print("1")
     with open("temp.txt", 'w') as output_file:
         output_file.write(json_data)
     
@@ -33,7 +34,7 @@ def run_terraform():
         for line in input_file:
             json_string += line.strip()
         print(json_string)
-
+    print("2", json_string)
     try:
         output_json = json.loads(json_string)
         print("Extracted JSON data:", output_json)
