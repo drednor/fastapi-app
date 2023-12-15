@@ -26,8 +26,10 @@ def run_terraform():
     for line in lines:
         print(line)
         if line:
-            key, value = map(str.strip, line.split('='))
-            output_dict[key] = value.strip('\"')
+            parts = line.split('=')
+            if len(parts) == 2:
+                key, value = map(str.strip, parts)
+                output_dict[key] = value.strip('\"')
     print(output_dict['instance_id'])
     print(output_dict['region'])
     print(output_dict['public_ip'])
