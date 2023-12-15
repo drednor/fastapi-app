@@ -17,42 +17,52 @@ def run_terraform():
         print(f"Terraform execution failed: {e}")
         exit(1)
     # Run Terraform output command to get the public IP
-    terraform_output = subprocess.run(["terraform", "output", "-json"], stdout=subprocess.PIPE, text=True, cwd=current_script_directory)
+    terraform_output = subprocess.run(["terraform", "output"], cwd=current_script_directory, stdout=subprocess.PIPE)
     print(terraform_output)
-    print("Terraform output:", terraform_output.stdout)
-    json_start = terraform_output.stdout.find('{')
-    json_end = terraform_output.stdout.rfind('}') + 1
-    json_data = terraform_output.stdout[json_start:json_end]
-    print(type(json_data))
-    print("before loads", json_data)
-    try:
-        output_json = json.loads(json_data)
-        print("doodle")
-        print("Extracted JSON data:", output_json)
-    except json.decoder.JSONDecodeError as e:
-        print(f"Error decoding JSON: {e}")
-        exit(1)
+    decoded_output = terraform_output.stdout.decode('utf-8')
+    print(decoded_output)
+    lines = decoded_output.split('\n')
+    output_dict = {}
+    for line in lines:
+        if line:
+            key, value = map(str.strip, line.split('='))
+            output_dict[key] = value.strip('\"')
+    print(output_dict['instance_id'])
+    print(output_dict['region'])
+    print(output_dict['public_ip'])
+    return output_dict['public_ip'], output_dict['region'], output_dict['instance_id']
+    # print("Terraform output:", terraform_output.stdout)
+    # json_start = terraform_output.stdout.find('{')
+    # json_end = terraform_output.stdout.rfind('}') + 1
+    # json_data = terraform_output.stdout[json_start:json_end]
+    # print(type(json_data))
+    # print("before loads", json_data)
+    # try:
+    #     output_json = json.loads(json_data)
+    #     print("doodle")
+    #     print("Extracted JSON data:", output_json)
+    # except json.decoder.JSONDecodeError as e:
+    #     print(f"Error decoding JSON: {e}")
+    #     exit(1)
 
-    print(output_json)
-    if terraform_output.returncode != 0:
-        print("Error running Terraform command:")
-        print("STDOUT:", terraform_output.stdout)
-        print("STDERR:", terraform_output.stderr)
-        exit(1)
+    # print(output_json)
+    # if terraform_output.returncode != 0:
+    #     print("Error running Terraform command:")
+    #     print("STDOUT:", terraform_output.stdout)
+    #     print("STDERR:", terraform_output.stderr)
+    #     exit(1)
     # Get the public IP address
-    instance_id = output_json.get("instance_id", "")
-    region = output_json.get("region", "")
-    public_ip = output_json.get("public_ip", "")
-    print("this is the public_ip =",public_ip["value"])
-    print("this is the instance_id =", instance_id["value"])
-    print("this is the region =", region["value"])
-    # Generate Ansible inventory
-    inventory_content = f"[app_servers]\n{public_ip['value']} ansible_ssh_private_key_file=./doodle_key.pem ansible_ssh_user=ubuntu\n"
-    # Write the inventory to a file
-    with open("inventory.ini", "w") as inventory_file:
-        inventory_file.write(inventory_content)
-
-    return public_ip["value"], region["value"], instance_id["value"]
+    # instance_id = output_json.get("instance_id", "")
+    # region = output_json.get("region", "")
+    # public_ip = output_json.get("public_ip", "")
+    # print("this is the public_ip =",public_ip["value"])
+    # print("this is the instance_id =", instance_id["value"])
+    # print("this is the region =", region["value"])
+    # # Generate Ansible inventory
+    # inventory_content = f"[app_servers]\n{public_ip['value']} ansible_ssh_private_key_file=./doodle_key.pem ansible_ssh_user=ubuntu\n"
+    # # Write the inventory to a file
+    # with open("inventory.ini", "w") as inventory_file:
+    #     inventory_file.write(inventory_content)
 
 
 def wait_for_initialization(instance_id, region):
@@ -78,6 +88,10 @@ def run_ansible():
 
 if __name__ == "__main__":
     public_ip, region, instance_id = run_terraform()
+    print(public_ip)
+    print(region)
+    print(instance_id)
+    print(done)
     #wait_for_initialization(instance_id, region)
     #run_ansible()
 

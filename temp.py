@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 x = """
 {"instance_id": {"sensitive": false,"type": "string","value": "i-02cb6e3762cdfdba2"},"public_ip": {"sensitive": false,"type": "string","value": "34.228.159.118"},"region": {"sensitive": false,"type": "string","value": "us-east-1"}}::debug::Terraform exited with code 0.::debug::stdout: {%0A  "instance_id": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "i-02cb6e3762cdfdba2"%0A  },%0A  "public_ip": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "34.228.159.118"%0A  },%0A  "region": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "us-east-1"%0A  }%0A}%0A::debug::stderr:::debug::exitcode: 0::set-output name=stdout::{%0A  "instance_id": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "i-02cb6e3762cdfdba2"%0A  },%0A  "public_ip": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "34.228.159.118"%0A  },%0A  "region": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "us-east-1"%0A  }%0A}"""
 json_sata = """ [command]/home/runner/work/_temp/cc123a87-1cfd-4991-92f0-cd75e352f8af/terraform-bin output -json
@@ -42,3 +43,15 @@ except json.decoder.JSONDecodeError as e:
     exit(1)
 
 print("this is the output = ",output_json)
+x =b'instance_id = "i-039e694d040993cd1"\npublic_ip = "54.146.6.116"\nregion = "us-east-1"\n'
+print(x)
+decoded_output = x.decode('utf-8')
+lines = decoded_output.split('\n')
+output_dict = {}
+for line in lines:
+    if line:
+        key, value = map(str.strip, line.split('='))
+        output_dict[key] = value.strip('\"')
+
+print(output_dict['instance_id'])
+# Access the output using result.stdout
