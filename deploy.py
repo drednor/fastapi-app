@@ -35,7 +35,7 @@ def run_terraform():
         print(f"Error decoding JSON: {e}")
         exit(1)
 
-    print(output_json)
+    print(type(output_json))
     if terraform_output.returncode != 0:
         print("Error running Terraform command:")
         print("STDOUT:", terraform_output.stdout)
