@@ -29,12 +29,12 @@ def run_terraform():
         output_file.write(json_data)
     
     with open("temp.txt", 'r') as input_file:
-        json_data = ""
+        temp = ""
         for line in input_file:
-            json_data += line.strip()
+            temp += line.strip()
 
     try:
-        output_json = json.loads(json_data)
+        output_json = json.loads(temp)
         print("Extracted JSON data:", output_json)
     except json.decoder.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")

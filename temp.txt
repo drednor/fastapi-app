@@ -1,0 +1,17 @@
+{
+  "instance_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "i-08b76f1cedb9aa85a"
+  },
+  "public_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "52.91.13.248"
+  },
+  "region": {
+    "sensitive": false,
+    "type": "string",
+    "value": "us-east-1"
+  }
+}

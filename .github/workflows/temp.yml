@@ -1,0 +1,8 @@
+name: Temp json
+
+job:
+  name: Checking json 
+    run:
+      python3 temp.py
+
+
