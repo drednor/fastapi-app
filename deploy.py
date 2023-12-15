@@ -10,7 +10,6 @@ def run_terraform():
     current_script_directory = os.path.dirname(os.path.abspath(__file__))
 
     print("Current working directory:", os.getcwd())
-    print("Terraform directory:", terraform_directory)
     try:
         subprocess.run(["terraform", "init"], check=True)
         subprocess.run(["terraform", "apply", "-auto-approve"], check=True)
