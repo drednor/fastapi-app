@@ -4,7 +4,6 @@ import json
 import boto3
 import time
 import os
-import re
 
 
 def run_terraform():
@@ -21,23 +20,22 @@ def run_terraform():
     terraform_output = subprocess.run(["terraform", "output", "-json"], stdout=subprocess.PIPE, text=True, cwd=current_script_directory)
     print(terraform_output)
     print("Terraform output:", terraform_output.stdout)
-    # json_start = terraform_output.stdout.find('{')
-    # json_end = terraform_output.stdout.rfind('}') + 1
-    # json_data = terraform_output.stdout[json_start:json_end]
-
-    # Use regular expression to find the JSON data
-    json_match = re.search(r'\{(?:[^{}]|(?R))*\}', terraform_output.stdout)
-    
-    if not json_match:
-        print("Error: Could not find valid JSON data in Terraform output.")
-        exit(1)
-
-    json_data = unquote(json_match.group(0))
+    json_start = terraform_output.stdout.find('{')
+    json_end = terraform_output.stdout.rfind('}') + 1
+    json_data = terraform_output.stdout[json_start:json_end]
 
     print("Extracted JSON data:", json_data)
+    with open("temp.txt", 'w') as output_file:
+        output_file.write(json_data)
+    
+    with open("temp.txt", 'r') as input_file:
+        json_data = ""
+        for line in input_file:
+            json_data += line.strip()
 
     try:
         output_json = json.loads(json_data)
+        print("Extracted JSON data:", output_json)
     except json.decoder.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
         exit(1)
