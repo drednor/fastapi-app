@@ -6,6 +6,8 @@ import time
 
 
 def run_terraform():
+    current_script_directory = os.path.dirname(os.path.abspath(__file__))
+    terraform_directory = os.path.join(current_script_directory, 'path', 'to', 'your', 'terraform', 'directory')
     try:
         subprocess.run(["terraform", "init"], check=True)
         subprocess.run(["terraform", "apply", "-auto-approve"], check=True)
@@ -13,7 +15,7 @@ def run_terraform():
         print(f"Terraform execution failed: {e}")
         exit(1)
     # Run Terraform output command to get the public IP
-    terraform_output = subprocess.run(["terraform", "output", "-json"], stdout=subprocess.PIPE, text=True, cwd='/path/to/your/terraform/directory')
+    terraform_output = subprocess.run(["terraform", "output", "-json"], stdout=subprocess.PIPE, text=True, cwd=terraform_directory)
     output_json = json.loads(terraform_output.stdout)
     if terraform_output.returncode != 0:
         print("Error running Terraform command:")
