@@ -32,11 +32,12 @@ def run_terraform():
     with open("temp.txt", 'r') as input_file:
         json_string = ""
         for line in input_file:
+            print(line)
             json_string += line.strip()
-        print(json_string)
     print("2", json_string)
     try:
         output_json = json.loads(json_string)
+        print("doodle")
         print("Extracted JSON data:", output_json)
     except json.decoder.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")

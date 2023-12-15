@@ -1,6 +1,7 @@
 import json
 import os
-
+x = """
+{"instance_id": {"sensitive": false,"type": "string","value": "i-02cb6e3762cdfdba2"},"public_ip": {"sensitive": false,"type": "string","value": "34.228.159.118"},"region": {"sensitive": false,"type": "string","value": "us-east-1"}}::debug::Terraform exited with code 0.::debug::stdout: {%0A  "instance_id": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "i-02cb6e3762cdfdba2"%0A  },%0A  "public_ip": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "34.228.159.118"%0A  },%0A  "region": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "us-east-1"%0A  }%0A}%0A::debug::stderr:::debug::exitcode: 0::set-output name=stdout::{%0A  "instance_id": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "i-02cb6e3762cdfdba2"%0A  },%0A  "public_ip": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "34.228.159.118"%0A  },%0A  "region": {%0A    "sensitive": false,%0A    "type": "string",%0A    "value": "us-east-1"%0A  }%0A}"""
 json_sata = """ [command]/home/runner/work/_temp/cc123a87-1cfd-4991-92f0-cd75e352f8af/terraform-bin output -json
 {
   "instance_id": {
