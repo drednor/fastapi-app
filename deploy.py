@@ -18,13 +18,21 @@ def run_terraform():
         exit(1)
     # Run Terraform output command to get the public IP
     terraform_output = subprocess.run(["terraform", "output", "-json"], stdout=subprocess.PIPE, text=True, cwd=current_script_directory)
-    output_json = json.loads(terraform_output.stdout)
+
+    print("Terraform output:", terraform_output.stdout)
+
+    try:
+        output_json = json.loads(terraform_output.stdout)
+    except json.decoder.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
+        exit(1)
+
+    print(output_json)
     if terraform_output.returncode != 0:
         print("Error running Terraform command:")
         print("STDOUT:", terraform_output.stdout)
         print("STDERR:", terraform_output.stderr)
         exit(1)
-    print(output_json)
     # Get the public IP address
     instance_id = output_json.get("instance_id", "")
     region = output_json.get("region", "")
