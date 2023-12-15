@@ -25,13 +25,14 @@ def run_terraform():
     # json_end = terraform_output.stdout.rfind('}') + 1
     # json_data = terraform_output.stdout[json_start:json_end]
 
-    json_match = re.search(r'\{.*\}', terraform_output.stdout)
+    # Use regular expression to find the JSON data
+    json_match = re.search(r'\{(?:[^{}]|(?R))*\}', terraform_output.stdout)
     
     if not json_match:
         print("Error: Could not find valid JSON data in Terraform output.")
         exit(1)
 
-    json_data = json_match.group(0)
+    json_data = unquote(json_match.group(0))
 
     print("Extracted JSON data:", json_data)
 
