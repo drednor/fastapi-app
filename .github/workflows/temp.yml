@@ -19,7 +19,6 @@ job:
         with:
           python-version: 3.9
       - name: Checking json 
-          run:
-            python3 temp.py
+        run: python3 temp.py
 
 
