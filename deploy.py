@@ -24,6 +24,7 @@ def run_terraform():
     lines = decoded_output.split('\n')
     output_dict = {}
     for line in lines:
+        print(line)
         if line:
             key, value = map(str.strip, line.split('='))
             output_dict[key] = value.strip('\"')
