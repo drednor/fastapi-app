@@ -25,16 +25,6 @@ def run_terraform():
     json_data = terraform_output.stdout[json_start:json_end]
 
     print("Extracted JSON data:", json_data)
-    print("1")
-    with open("temp.txt", 'w') as output_file:
-        output_file.write(json_data)
-    
-    with open("temp.txt", 'r') as input_file:
-        json_string = ""
-        for line in input_file:
-            print(line)
-            json_string += line.strip()
-    print("2", json_string)
     try:
         output_json = json.loads(json_string)
         print("doodle")
@@ -88,8 +78,8 @@ def run_ansible():
 
 if __name__ == "__main__":
     public_ip, region, instance_id = run_terraform()
-    wait_for_initialization(instance_id, region)
-    run_ansible()
+    #wait_for_initialization(instance_id, region)
+    #run_ansible()
 
 
 
