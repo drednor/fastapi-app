@@ -26,7 +26,7 @@ def run_terraform():
 
     print("Extracted JSON data:", json_data)
     try:
-        output_json = json.loads(json_string)
+        output_json = json.loads(json_data)
         print("doodle")
         print("Extracted JSON data:", output_json)
     except json.decoder.JSONDecodeError as e:
