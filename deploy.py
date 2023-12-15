@@ -4,6 +4,7 @@ import json
 import boto3
 import time
 import os
+import re
 
 
 def run_terraform():
