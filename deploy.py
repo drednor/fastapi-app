@@ -20,9 +20,17 @@ def run_terraform():
     terraform_output = subprocess.run(["terraform", "output", "-json"], stdout=subprocess.PIPE, text=True, cwd=current_script_directory)
     print(terraform_output)
     print("Terraform output:", terraform_output.stdout)
-    json_start = terraform_output.stdout.find('{')
-    json_end = terraform_output.stdout.rfind('}') + 1
-    json_data = terraform_output.stdout[json_start:json_end]
+    # json_start = terraform_output.stdout.find('{')
+    # json_end = terraform_output.stdout.rfind('}') + 1
+    # json_data = terraform_output.stdout[json_start:json_end]
+
+    json_match = re.search(r'\{.*\}', terraform_output.stdout)
+    
+    if not json_match:
+        print("Error: Could not find valid JSON data in Terraform output.")
+        exit(1)
+
+    json_data = json_match.group(0)
 
     print("Extracted JSON data:", json_data)
 
