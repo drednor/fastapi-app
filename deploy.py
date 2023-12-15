@@ -23,8 +23,9 @@ def run_terraform():
     json_start = terraform_output.stdout.find('{')
     json_end = terraform_output.stdout.rfind('}') + 1
     json_data = terraform_output.stdout[json_start:json_end]
-
-    print("Extracted JSON data:", json_data)
+    json_data = json_data.strip()
+    print(type(json_data))
+    print("before loads", json_data)
     try:
         output_json = json.loads(json_data)
         print("doodle")
