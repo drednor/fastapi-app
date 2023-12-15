@@ -24,6 +24,7 @@ def run_terraform():
     json_end = terraform_output.stdout.rfind('}') + 1
     json_data = terraform_output.stdout[json_start:json_end]
     json_data = json_data.strip()
+    json_data = json.dumps(json_data)
     print(type(json_data))
     print("before loads", json_data)
     try:
