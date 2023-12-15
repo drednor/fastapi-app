@@ -23,8 +23,6 @@ def run_terraform():
     json_start = terraform_output.stdout.find('{')
     json_end = terraform_output.stdout.rfind('}') + 1
     json_data = terraform_output.stdout[json_start:json_end]
-    json_data = json_data.strip()
-    json_data = json.dumps(json_data)
     print(type(json_data))
     print("before loads", json_data)
     try:
@@ -35,28 +33,24 @@ def run_terraform():
         print(f"Error decoding JSON: {e}")
         exit(1)
 
-    print(type(output_json))
-    data_dict = json.loads(output_json)
-    print(type(data_dict))
-    print("doodle")
-    print(data_dict)
+    print(output_json)
     if terraform_output.returncode != 0:
         print("Error running Terraform command:")
         print("STDOUT:", terraform_output.stdout)
         print("STDERR:", terraform_output.stderr)
         exit(1)
     # Get the public IP address
-    instance_id = data_dict.get("instance_id", "")
-    region = data_dict.get("region", "")
-    public_ip = data_dict.get("public_ip", "")
+    instance_id = output_json.get("instance_id", "")
+    region = output_json.get("region", "")
+    public_ip = output_json.get("public_ip", "")
     print("this is the public_ip =",public_ip["value"])
     print("this is the instance_id =", instance_id["value"])
     print("this is the region =", region["value"])
     # Generate Ansible inventory
-    # inventory_content = f"[app_servers]\n{public_ip['value']} ansible_ssh_private_key_file=./doodle_key.pem ansible_ssh_user=ubuntu\n"
-    # # Write the inventory to a file
-    # with open("inventory.ini", "w") as inventory_file:
-    #     inventory_file.write(inventory_content)
+    inventory_content = f"[app_servers]\n{public_ip['value']} ansible_ssh_private_key_file=./doodle_key.pem ansible_ssh_user=ubuntu\n"
+    # Write the inventory to a file
+    with open("inventory.ini", "w") as inventory_file:
+        inventory_file.write(inventory_content)
 
     return public_ip["value"], region["value"], instance_id["value"]
 
