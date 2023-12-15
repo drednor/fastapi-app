@@ -94,7 +94,7 @@ if __name__ == "__main__":
     print(public_ip)
     print(region)
     print(instance_id)
-    print(done)
+    print("done")
     #wait_for_initialization(instance_id, region)
     #run_ansible()
 
