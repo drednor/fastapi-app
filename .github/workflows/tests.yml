@@ -76,8 +76,8 @@ jobs:
 
       - name: Deploy python script
         if: ${{ github.event.inputs.terraform_action == 'apply'}}
-        run: python3 deploy.py
+        run: python3 aws_script.py deploy 
       
       - name: terraform destroy
         if: ${{ github.event.inputs.terraform_action == 'destroy'}}
-        run: python3 destroy.py
+        run: python3 aws_script.py destroy

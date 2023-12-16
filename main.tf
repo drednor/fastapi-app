@@ -76,10 +76,6 @@ resource "aws_instance" "app_server" {
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt update
     sudo apt install -y docker-ce
-    sudo apt update
-    sudo apt install -y software-properties-common
-    sudo add-apt-repository --yes --update ppa:ansible/ansible
-    sudo apt install -y ansible
 EOF
 
 

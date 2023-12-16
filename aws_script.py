@@ -4,6 +4,7 @@ import json
 import boto3
 import time
 import os
+import sys
 
 
 def run_terraform():
@@ -63,13 +64,24 @@ def run_ansible():
     except subprocess.CalledProcessError as e:
         print(f"error Ansible {e}")
 
+
+def destroy_terraform():
+    try:
+        subprocess.run(["terraform", "init"], check=True)
+        subprocess.run(["terraform","destroy","-auto-approve"],check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"terraform destroy failed - {e}")
+
 if __name__ == "__main__":
-    public_ip, region, instance_id = run_terraform()
-    print(public_ip)
-    print(region)
-    print(instance_id)
-    wait_for_initialization(instance_id, region)
-    run_ansible()
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "deploy":
+            public_ip, region, instance_id = run_terraform()
+            wait_for_initialization(instance_id, region)
+            run_ansible()
+            print("Deployment Done")
+        elif sys.argv[1] == "destroy":
+            destroy_terraform()
+            print("ec2 Instance Destroyed")
     print("done")
     
 
